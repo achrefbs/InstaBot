@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 from app.forms import Follow_by_tag_Form
 from app.models.account import Account
 from instapy import InstaPy
@@ -37,7 +37,7 @@ def followbytag():
                       disable_image_load=False, headless_browser=False)
 
     with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, like=delay)
+        session.set_action_delays(enabled=True, follow=delay, random_range=(80, 140))
         hashtags = session.target_list('tags.txt')
         session.follow_by_tags(hashtags, amount=amount, randomize=randomize)
 

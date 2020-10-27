@@ -1,5 +1,5 @@
 from app import app, db
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 from app.models.account import Account
 from app.forms import AccountForm
 

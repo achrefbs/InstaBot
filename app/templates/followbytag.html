@@ -1,23 +1,45 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Follow by tag</h1>
-    <form action="" method="post" novalidate>
-        <p>
-            Accounts<br>
-            {% for acc in form.accounts.choices %}
-            	<input type="checkbox" name="accounts" value="{{acc[0]}}"> {{acc[1]}} <br>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.tags() }} tags
-        </p>
-        <p> {{ form.amount() }} amount</p>
-        <p> {{ form.delay() }} delay</p>
-        <p> {{ form.randomize() }} randomize </p>
-        <p>{{ form.submit() }}</p>
-        <p>{{ get_flashed_messages()[0] }}</p>
-    </form>
+<div class="container-fluid">
+	<br>
+	<br>
+	<div class="card shadow mb-4 bg-gray-900" style="border: none;">
+		<div class="card-header py-3 bg-gray-900">
+        	<h6 class="m-0 font-weight-bold text-primary text-gray-100">Follow by tag</h6>
+    	</div>
+    	<div class="card-body">
+			<form action="" method="post" novalidate>
+				<div class="form-group">
+					<label class="text-gray-100">Accounts</label>
+	            	{% for acc in form.accounts.choices %}
+		            	<br><input type="checkbox" name="accounts" value="{{acc[0]}}">  <label class="text-gray-100">{{acc[1]}}</label>
+		            {% endfor %}
+		        </div>
+
+		        <div class="form-group">
+		        	<label class="text-gray-100">Tags</label><br>
+		        	{{ form.tags(class="form-control") }}
+		    	</div>
+		    	<div class="form-group">
+		        	<label class="text-gray-100">Amount</label><br>
+		        	{{ form.amount(class="form-control") }}
+		    	</div>
+		    	<div class="form-group">
+		        	<label class="text-gray-100">Delay</label><br>
+		        	{{ form.delay(class="form-control") }}
+		    	</div>
+		    	<div class="form-group">
+		        	{{ form.randomize() }}
+		        	<label class="text-gray-100">Randomize</label>
+		    	</div>
+		    	{{ form.submit(class="btn btn-primary") }}<br>
+		    	{{ get_flashed_messages()[0] }}
+			</form>
+    	</div>
+
+	</div>
+</div>
 
 
 {% endblock %}
