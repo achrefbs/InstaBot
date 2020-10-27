@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h1>Follow by tag</h1>
+    <form action="" method="post" novalidate>
+        <p>
+            Accounts<br>
+            {% for acc in form.accounts.choices %}
+            	<input type="checkbox" name="accounts" value="{{acc[0]}}"> {{acc[1]}} <br>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.tags() }} tags
+        </p>
+        <p> {{ form.amount() }} amount</p>
+        <p> {{ form.delay() }} delay</p>
+        <p> {{ form.randomize() }} randomize </p>
+        <p>{{ form.submit() }}</p>
+        <p>{{ get_flashed_messages()[0] }}</p>
+    </form>
+
+
+{% endblock %}
