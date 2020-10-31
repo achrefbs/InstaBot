@@ -1,1 +1,2 @@
 # InstaBot
+export PYTHONDONTWRITEBYTECODE=1

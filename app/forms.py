@@ -18,3 +18,7 @@ class BaseForm(FlaskForm):
 
 class Follow_by_tag_Form(BaseForm):
 	tags = TextAreaField('tags')
+
+
+class Follow_user_followers_Form(BaseForm):
+	users = TextAreaField('users')
