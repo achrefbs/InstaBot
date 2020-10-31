@@ -22,3 +22,8 @@ class Follow_by_tag_Form(BaseForm):
 
 class Follow_user_followers_Form(BaseForm):
 	users = TextAreaField('users')
+
+
+
+class Like_by_tag_Form(BaseForm):
+	tags = TextAreaField('tags')

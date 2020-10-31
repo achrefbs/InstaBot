@@ -75,7 +75,7 @@ def followuserfollowers():
 
     if len(accounts_id) != 1:
         flash('please select one account')
-        return redirect(url_for('display_followbytag'))
+        return redirect(url_for('display_followuserfollowers'))
 
     with open('users.txt', 'w') as f:
         f.write(users)
