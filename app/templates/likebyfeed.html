@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container-fluid">
+	<br>
+	<br>
+	<div class="card shadow mb-4 bg-gray-900" style="border: none;">
+		<div class="card-header py-3 bg-gray-900">
+        	<h6 class="m-0 font-weight-bold text-primary text-gray-100">Like by feed</h6>
+    	</div>
+    	<div class="card-body">
+			<form action="" method="post" novalidate>
+				<div class="form-group">
+					<label class="text-gray-100">Accounts</label>
+	            	{% for acc in form.accounts.choices %}
+		            	<br><input type="checkbox" name="accounts" value="{{acc[0]}}">  <label class="text-gray-100">{{acc[1]}}</label>
+		            {% endfor %}
+		        </div>
+
+		    	<div class="form-group">
+		        	<label class="text-gray-100">Amount</label><br>
+		        	{{ form.amount(class="form-control") }}
+		    	</div>
+		    	<div class="form-group">
+		        	<label class="text-gray-100">Delay</label><br>
+		        	{{ form.delay(class="form-control") }}
+		    	</div>
+		    	<div class="form-group">
+		        	{{ form.randomize() }}
+		        	<label class="text-gray-100">Randomize</label>
+		    	</div>
+		    	{{ form.submit(class="btn btn-primary") }}<br>
+		    	{{ get_flashed_messages()[0] }}
+			</form>
+    	</div>
+
+	</div>
+</div>
+
+
+{% endblock %}

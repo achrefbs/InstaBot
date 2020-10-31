@@ -27,3 +27,7 @@ class Follow_user_followers_Form(BaseForm):
 
 class Like_by_tag_Form(BaseForm):
 	tags = TextAreaField('tags')
+
+
+class Like_by_feed_Form(BaseForm):
+	pass
