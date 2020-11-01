@@ -9,5 +9,5 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-from app import routes, follow, like, unfollow
+from app import routes, follow, like, unfollow, comment
 

@@ -48,3 +48,9 @@ class unfollow_non_followers(BaseForm):
 
 class unfollow_all(BaseForm):
 	unfollow_after = IntegerField('unfollow_after')
+
+
+class Comment_by_tag_Form(BaseForm):
+	tags = TextAreaField('tags')
+	comments = TextAreaField('comments')
+	percentage = IntegerField('percentage')

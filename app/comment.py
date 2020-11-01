@@ -1,0 +1,54 @@
+from app import app, db
+from flask import render_template, redirect, url_for, request, flash
+from app.forms import Comment_by_tag_Form
+from app.models.account import Account
+from instapy import InstaPy
+from instapy import smart_run
+
+
+@app.route('/comment_by_tag')
+def display_commentbytag():
+	form = Comment_by_tag_Form()
+	form.accounts.choices = [(acc.id, acc.username) for acc in db.session.query(Account)]
+	return render_template('commentbytag.html', title='comment by tag', form=form)
+
+
+
+
+@app.route('/comment_by_tag', methods=['POST'])
+def commentbytag():
+	form = Comment_by_tag_Form()
+	accounts_id = request.form.getlist('accounts')
+	tags = request.form.get('tags')
+	amount = int(request.form.get('amount'))
+	delay = int(request.form.get('delay'))
+	comments = request.form.get('comments')
+	percentage = int(request.form.get('percentage'))
+	if request.form.get('randomize') is None:
+		randomize = False
+	else:
+		randomize = True
+
+	if len(accounts_id) != 1:
+		flash('please select one account')
+		return redirect(url_for('display_commentbytag'))
+
+	with open('tags.txt', 'w') as f:
+			f.write(tags)
+	with open('comments.txt', 'w') as f:
+			f.write(comments)
+
+
+	session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+					  password = db.session.query(Account).get(accounts_id[0]).password,
+					  disable_image_load=False, headless_browser=False)
+	with smart_run(session, threaded=True):
+		session.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
+		hashtags = session.target_list('tags.txt')
+		comments = session.target_list('comments.txt')
+		session.set_do_comment(enabled=True, percentage=percentage)
+		session.set_comments(comments)
+		session.like_by_tags(hashtags, amount=amount, randomize=randomize)
+
+
+	return redirect(url_for('display_commentbytag'))
