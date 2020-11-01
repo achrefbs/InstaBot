@@ -42,7 +42,7 @@ def likebytag():
                       disable_image_load=False, headless_browser=False)
 
     with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        session.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
         hashtags = session.target_list('tags.txt')
         session.like_by_tags(hashtags, amount=amount, randomize=randomize)
 
@@ -84,7 +84,7 @@ def likebyfeed():
                       disable_image_load=False, headless_browser=False)
 
     with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        session.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
         session.like_by_feed(amount=amount, randomize=randomize)
 
     return redirect(url_for('display_likebyfeed'))

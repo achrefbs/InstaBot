@@ -24,6 +24,9 @@ class Follow_user_followers_Form(BaseForm):
 	users = TextAreaField('users')
 
 
+class Follow_by_list_Form(BaseForm):
+	users = TextAreaField('users')
+
 
 class Like_by_tag_Form(BaseForm):
 	tags = TextAreaField('tags')
@@ -31,3 +34,17 @@ class Like_by_tag_Form(BaseForm):
 
 class Like_by_feed_Form(BaseForm):
 	pass
+
+
+class unfollow_by_list_Form(BaseForm):
+	users = TextAreaField('users')
+	unfollow_after = IntegerField('unfollow_after')
+
+
+
+class unfollow_non_followers(BaseForm):
+	unfollow_after = IntegerField('unfollow_after')
+
+
+class unfollow_all(BaseForm):
+	unfollow_after = IntegerField('unfollow_after')

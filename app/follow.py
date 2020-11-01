@@ -1,6 +1,6 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
-from app.forms import Follow_by_tag_Form, Follow_user_followers_Form
+from app.forms import Follow_by_tag_Form, Follow_user_followers_Form, Follow_by_list_Form
 from app.models.account import Account
 from instapy import InstaPy
 from instapy import smart_run
@@ -96,3 +96,39 @@ def followuserfollowers():
     print('users: {}'.format(users))
 
     return redirect(url_for('display_followuserfollowers'))
+
+
+
+
+@app.route('/follow_by_list')
+def display_followbylist():
+    form = Follow_by_list_Form()
+    form.accounts.choices = [(acc.id, acc.username) for acc in db.session.query(Account)]
+    return render_template('followbylist.html', title='Follow by list', form=form)
+
+
+@app.route('/follow_by_list', methods=['POST'])
+def followbylist():
+    form = Follow_by_list_Form()
+    accounts_id = request.form.getlist('accounts')
+    users = request.form.get('users')
+    amount = int(request.form.get('amount'))
+    delay = int(request.form.get('delay'))
+
+    if len(accounts_id) != 1:
+        flash('please select one account')
+        return redirect(url_for('display_followbylist'))
+
+    with open('users.txt', 'w') as f:
+        f.write(users)
+
+    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+                      password = db.session.query(Account).get(accounts_id[0]).password,
+                      disable_image_load=False, headless_browser=False)
+
+    with smart_run(session, threaded=True):
+        session.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        users = session.target_list('users.txt')
+        session.follow_by_list(users, amount=amount)
+
+    return redirect(url_for('display_followbylist'))
