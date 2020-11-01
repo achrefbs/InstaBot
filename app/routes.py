@@ -1,7 +1,9 @@
 from app import app, db
 from flask import render_template, redirect, url_for, request, flash
 from app.models.account import Account
-from app.forms import AccountForm
+from app.forms import AccountForm, accept_requests_Form
+from instapy import InstaPy
+from instapy import smart_run
 
 @app.route('/')
 def dashboard():
@@ -46,3 +48,32 @@ def delete_account(id):
     db.session.delete(Account.query.get(id))
     db.session.commit()
     return redirect(url_for('accounts'))
+
+
+
+@app.route('/accept_requests')
+def display_acceptrequests():
+    form = accept_requests_Form()
+    form.accounts.choices = [(acc.id, acc.username) for acc in db.session.query(Account)]
+    return render_template('acceptrequests.html', title='Accept pending requests', form=form)
+
+
+@app.route('/accept_requests', methods=['POST'])
+def acceptrequests():
+    form = accept_requests_Form()
+    accounts_id = request.form.getlist('accounts')
+    amount = int(request.form.get('amount'))
+    delay = int(request.form.get('delay'))
+
+    if len(accounts_id) != 1:
+        flash('please select one account')
+        return redirect(url_for('display_acceptrequests'))
+
+    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+                      password = db.session.query(Account).get(accounts_id[0]).password,
+                      disable_image_load=False, headless_browser=False)
+
+    with smart_run(session, threaded=True):
+        session.accept_follow_requests(amount=amount, sleep_delay=delay)
+
+    return redirect(url_for('display_acceptrequests'))
