@@ -1,9 +1,9 @@
 from app import app, db
-from flask import render_template, redirect, url_for, request, flash
+from flask import render_template, redirect, url_for, request, flash, session
 from app.models.account import Account
 from app.forms import AccountForm, accept_requests_Form
 from instapy import InstaPy
-from instapy import smart_run
+from instapy import smart_run, get_workspace
 
 @app.route('/')
 def dashboard():
@@ -77,3 +77,30 @@ def acceptrequests():
         session.accept_follow_requests(amount=amount, sleep_delay=delay)
 
     return redirect(url_for('display_acceptrequests'))
+
+
+
+
+
+def readlastline(f):
+    f.seek(-2, 2)              # Jump to the second last byte.
+    while f.read(1) != b"\n":  # Until EOL is found ...
+        f.seek(-2, 1)          # ... jump back, over the read byte plus one more.
+    return f.read()            # Read all data from this point on.
+
+
+@app.route('/logs')
+def logs():
+    with open('users.txt', 'r') as f:
+        user = f.readline()
+    fname = get_workspace()['path'] + "/logs/" + "accountnumber2number2" + "/general.log"
+    if user != '':
+        with open(fname, 'rb') as logfile:
+            last = readlastline(logfile)
+            if last != session.get('last'):
+                session['last'] = last
+                return last
+            else:
+                return ''
+    return ''
+

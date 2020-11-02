@@ -129,6 +129,58 @@
 
           {% block content %} {% endblock %}
 
+    <div class="container-fluid">
+      <div class="card-header py-3 bg-gray-900">
+          <h6 class="m-0 font-weight-bold text-primary text-gray-100">logs</h6>
+      </div>
+      <div class="card shadow mb-4 bg-gray-900 text-gray-100" style="border: none;">
+   <textarea id='log' rows=10 cols=60 autofocus readonly class= "bg-gray-900">
+    </textarea>
+  </div>
+  </div>
+
+    <script type="text/javascript">
+        setTimeout(function() {Ajax();}, 100);
+    </script>
+
+    <script type="text/javascript">
+        function Ajax()
+        {
+            var
+                $http,
+                $self = arguments.callee;
+
+            if (window.XMLHttpRequest) {
+                $http = new XMLHttpRequest();
+            } else if (window.ActiveXObject) {
+                try {
+                    $http = new ActiveXObject('Msxml2.XMLHTTP');
+                } catch(e) {
+                    $http = new ActiveXObject('Microsoft.XMLHTTP');
+                }
+            }
+            if ($http) {
+                $http.onreadystatechange = function()
+                {
+                    if (/4|^complete$/.test($http.readyState)) {
+                            document.getElementById('log').value += $http.responseText;
+                            document.getElementById('log').scrollTop = document.getElementById('log').scrollHeight;
+                            setTimeout(function(){$self();}, 100);
+                    }
+                };
+                $http.open('GET', '/logs' + '?' + new Date().getTime(), true);
+                $http.send(null);
+
+            }
+
+        }
+
+    </script>
+
+
+
+
+
       <!-- End of Main Content -->
 
     </div>
@@ -156,3 +208,4 @@
 </body>
 
 </html>
+
