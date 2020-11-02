@@ -35,15 +35,16 @@ def likebytag():
 
     with open('tags.txt', 'w') as f:
         f.write(tags)
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
-        hashtags = session.target_list('tags.txt')
-        session.like_by_tags(hashtags, amount=amount, randomize=randomize)
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
+        hashtags = sess.target_list('tags.txt')
+        sess.like_by_tags(hashtags, amount=amount, randomize=randomize)
 
     return redirect(url_for('display_likebytag'))
 
@@ -71,13 +72,14 @@ def likebyfeed():
     if len(accounts_id) != 1:
         flash('please select one account')
         return redirect(url_for('display_likebyfeed'))
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
-        session.like_by_feed(amount=amount, randomize=randomize)
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
+        sess.like_by_feed(amount=amount, randomize=randomize)
 
     return redirect(url_for('display_likebyfeed'))

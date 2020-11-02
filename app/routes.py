@@ -69,12 +69,15 @@ def acceptrequests():
         flash('please select one account')
         return redirect(url_for('display_acceptrequests'))
 
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.accept_follow_requests(amount=amount, sleep_delay=delay)
+    with smart_run(sess, threaded=True):
+        sess.accept_follow_requests(amount=amount, sleep_delay=delay)
 
     return redirect(url_for('display_acceptrequests'))
 
@@ -91,16 +94,19 @@ def readlastline(f):
 
 @app.route('/logs')
 def logs():
-    with open('users.txt', 'r') as f:
+
+    with open('account.txt', 'r') as f:
         user = f.readline()
-    fname = get_workspace()['path'] + "/logs/" + "accountnumber2number2" + "/general.log"
-    if user != '':
-        with open(fname, 'rb') as logfile:
-            last = readlastline(logfile)
-            if last != session.get('last'):
-                session['last'] = last
-                return last
-            else:
-                return ''
-    return ''
+    try:
+        fname = get_workspace()['path'] + "/logs/" + user + "/general.log"
+        if user != '':
+            with open(fname, 'rb') as logfile:
+                last = readlastline(logfile)
+                if last != session.get('last'):
+                    session['last'] = last
+                    return last
+                else:
+                    return ''
+    except :
+        return ''
 

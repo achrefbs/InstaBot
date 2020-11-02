@@ -31,21 +31,16 @@ def followbytag():
 
     with open('tags.txt', 'w') as f:
         f.write(tags)
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
-        hashtags = session.target_list('tags.txt')
-        session.follow_by_tags(hashtags, amount=amount, randomize=randomize)
-
-    print('accounts_id: {}'.format(accounts_id))
-    print('amount: {}'.format(amount))
-    print('delay: {}'.format(delay))
-    print('randomize: {}'.format(randomize))
-    print('tags: {}'.format(tags))
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        hashtags = sess.target_list('tags.txt')
+        sess.follow_by_tags(hashtags, amount=amount, randomize=randomize)
 
     return redirect(url_for('display_followbytag'))
 
@@ -79,21 +74,16 @@ def followuserfollowers():
 
     with open('users.txt', 'w') as f:
         f.write(users)
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
-        usersfoll = session.target_list('users.txt')
-        session.follow_user_followers(usersfoll, amount=amount, randomize=randomize)
-
-    print('accounts_id: {}'.format(accounts_id))
-    print('amount: {}'.format(amount))
-    print('delay: {}'.format(delay))
-    print('randomize: {}'.format(randomize))
-    print('users: {}'.format(users))
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        usersfoll = sess.target_list('users.txt')
+        sess.follow_user_followers(usersfoll, amount=amount, randomize=randomize)
 
     return redirect(url_for('display_followuserfollowers'))
 
@@ -121,14 +111,15 @@ def followbylist():
 
     with open('users.txt', 'w') as f:
         f.write(users)
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
-        users = session.target_list('users.txt')
-        session.follow_by_list(users, amount=amount)
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, follow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        users = sess.target_list('users.txt')
+        sess.follow_by_list(users, amount=amount)
 
     return redirect(url_for('display_followbylist'))

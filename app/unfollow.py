@@ -31,15 +31,16 @@ def unfollowbylist():
 
     with open('unfollowlist.txt', 'w') as f:
         f.write(users)
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, unfollow=delay, randomize=True, random_range_from=70, random_range_to=140)
-        unfollowlist = session.target_list('unfollowlist.txt')
-        session.unfollow_users(amount=amount ,custom_list_enabled=True, custom_list= unfollowlist, unfollow_after=unfollow_after)
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, unfollow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        unfollowlist = sess.target_list('unfollowlist.txt')
+        sess.unfollow_users(amount=amount ,custom_list_enabled=True, custom_list= unfollowlist, unfollow_after=unfollow_after)
 
     return redirect(url_for('display_unfollowbylist'))
 
@@ -66,14 +67,15 @@ def unfollownonfollowers():
     if len(accounts_id) != 1:
         flash('please select one account')
         return redirect(url_for('display_unfollownonfollowers'))
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, unfollow=delay, randomize=True, random_range_from=70, random_range_to=140)
-        session.unfollow_users(amount=amount, nonFollowers=True, unfollow_after=unfollow_after)
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, unfollow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        sess.unfollow_users(amount=amount, nonFollowers=True, unfollow_after=unfollow_after)
 
     return redirect(url_for('display_unfollownonfollowers'))
 
@@ -100,13 +102,14 @@ def unfollowall():
     if len(accounts_id) != 1:
         flash('please select one account')
         return redirect(url_for('display_unfollowall'))
-
-    session = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
+    with open('account.txt', 'w') as f:
+        f.write(db.session.query(Account).get(accounts_id[0]).username)
+    sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
                       disable_image_load=False, headless_browser=False)
 
-    with smart_run(session, threaded=True):
-        session.set_action_delays(enabled=True, unfollow=delay, randomize=True, random_range_from=70, random_range_to=140)
-        session.unfollow_users(amount=amount, allFollowing=True, unfollow_after=unfollow_after)
+    with smart_run(sess, threaded=True):
+        sess.set_action_delays(enabled=True, unfollow=delay, randomize=True, random_range_from=70, random_range_to=140)
+        sess.unfollow_users(amount=amount, allFollowing=True, unfollow_after=unfollow_after)
 
     return redirect(url_for('display_unfollowall'))
