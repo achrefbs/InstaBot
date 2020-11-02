@@ -16,7 +16,6 @@ def display_likebytag():
 
 
 
-
 @app.route('/like_by_tag', methods=['POST'])
 def likebytag():
     form = Like_by_tag_Form()
@@ -45,12 +44,6 @@ def likebytag():
         session.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
         hashtags = session.target_list('tags.txt')
         session.like_by_tags(hashtags, amount=amount, randomize=randomize)
-
-    print('accounts_id: {}'.format(accounts_id))
-    print('amount: {}'.format(amount))
-    print('delay: {}'.format(delay))
-    print('randomize: {}'.format(randomize))
-    print('tags: {}'.format(tags))
 
     return redirect(url_for('display_likebytag'))
 

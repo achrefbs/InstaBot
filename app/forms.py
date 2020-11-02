@@ -56,5 +56,13 @@ class Comment_by_tag_Form(BaseForm):
 	percentage = IntegerField('percentage')
 
 
+class Comment_by_feed_Form(BaseForm):
+	comments = TextAreaField('comments')
+	percentage = IntegerField('percentage')
+
+
 class accept_requests_Form(BaseForm):
 	pass
+
+
+
