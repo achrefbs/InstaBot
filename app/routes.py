@@ -5,11 +5,8 @@ from app.forms import AccountForm, accept_requests_Form
 from instapy import InstaPy
 from instapy import smart_run, get_workspace
 
+
 @app.route('/')
-def dashboard():
-	return render_template('dashboard.html')
-
-
 @app.route('/accounts')
 def accounts():
     """
