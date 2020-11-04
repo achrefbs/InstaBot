@@ -39,7 +39,7 @@ def likebytag():
         f.write(db.session.query(Account).get(accounts_id[0]).username)
     sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
-                      disable_image_load=False, headless_browser=False)
+                      disable_image_load=False, headless_browser=True)
 
     with smart_run(sess, threaded=True):
         sess.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)
@@ -76,7 +76,7 @@ def likebyfeed():
         f.write(db.session.query(Account).get(accounts_id[0]).username)
     sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
-                      disable_image_load=False, headless_browser=False)
+                      disable_image_load=False, headless_browser=True)
 
     with smart_run(sess, threaded=True):
         sess.set_action_delays(enabled=True, like=delay, randomize=True, random_range_from=70, random_range_to=140)

@@ -15,7 +15,7 @@ def accounts():
     add account to db
     displays a list of all accounts
     """
-    form = AccountForm() 
+    form = AccountForm()
     all_accounts = db.session.query(Account)
     return render_template('accounts.html', title='Accounts', form=form, all_accounts=all_accounts)
 
@@ -23,7 +23,7 @@ def accounts():
 @app.route('/accounts', methods=['POST'])
 def add_account():
     """adds account to db"""
-    form = AccountForm() 
+    form = AccountForm()
     username = request.form.get('username')
     password = request.form.get('password')
     if form.submit():
@@ -71,7 +71,7 @@ def acceptrequests():
 
     sess = InstaPy(username = db.session.query(Account).get(accounts_id[0]).username,
                       password = db.session.query(Account).get(accounts_id[0]).password,
-                      disable_image_load=False, headless_browser=False)
+                      disable_image_load=False, headless_browser=True)
 
     with smart_run(sess, threaded=True):
         sess.accept_follow_requests(amount=amount, sleep_delay=delay)
@@ -95,9 +95,10 @@ def logs():
     with open('account.txt', 'r') as f:
         user = f.readline()
     try:
-        fname = get_workspace()['path'] + "/logs/" + user + "/general.log"
+        if not session.get('fname') or session.get('fname') == "":
+            session['fname'] = get_workspace()['path'] + "/logs/" + user + "/general.log"
         if user != '':
-            with open(fname, 'rb') as logfile:
+            with open(session.get('fname'), 'rb') as logfile:
                 last = readlastline(logfile)
                 if last != session.get('last'):
                     session['last'] = last
@@ -106,4 +107,3 @@ def logs():
                     return ''
     except :
         return ''
-
